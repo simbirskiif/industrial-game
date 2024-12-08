@@ -27,4 +27,14 @@ public class EntryPoint : MonoBehaviour
         QueuedItem = null;
         return item;
     }
+    public void ClearQueue()
+    {
+        QueuedItem = null;
+    }
+    public ItemInfo ClearAndGet()
+    {
+        ItemInfo item = this.QueuedItem;
+        QueuedItem = null;
+        return item;
+    }
 }
