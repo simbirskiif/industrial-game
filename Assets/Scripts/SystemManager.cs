@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Manager : MonoBehaviour
+public class SystemManager : MonoBehaviour
 {
     private float deltaTime = 0.0f;
     public int targetFrameRate = 60;
