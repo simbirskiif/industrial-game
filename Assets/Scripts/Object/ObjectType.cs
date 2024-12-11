@@ -1,5 +1,6 @@
 public enum ObjectType
 {
     None,
-    Extractor
+    Extractor,
+    Storage
 }

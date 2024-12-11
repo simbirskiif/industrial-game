@@ -27,20 +27,20 @@ public class PointerChecker : MonoBehaviour
             if (other.gameObject.layer == ObjectLayerMask)
             {
                 ObjectName.text = other.gameObject.GetComponent<ObjectInfo>().itemName;
+                other.gameObject.GetComponent<Outline>().enabled = true;
             }
-            else
-            {
-                ObjectName.text = "";
-            }
-        }
-        else
-        {
-            ObjectName.text = "";
         }
     }
     void OnTriggerExit(Collider other)
     {
         // Debug.Log("OnTriggerExit");
+        if (other.gameObject.GetComponent<ObjectInfo>() != null)
+        {
+            if (other.gameObject.layer == ObjectLayerMask)
+            {
+                other.gameObject.GetComponent<Outline>().enabled = false;
+            }
+        }
         ObjectName.text = "";
     }
 }
