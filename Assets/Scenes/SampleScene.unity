@@ -179,10 +179,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Items:
-  - Name: 
+  - Name: Test item
     Prefab: {fileID: 0}
     Size: 0
     StackSize: 999
+    TAG: TEST
 --- !u!1 &46185503
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,11 +995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - itemInfo:
-      Name: Test
-      Prefab: {fileID: 0}
-      Size: 0
-      StackSize: 999
+  - itemInfo: 0
     amount: 100
   exitPoint: {fileID: 1976666454}
   entryPoint: {fileID: 724113114}
@@ -1757,7 +1754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cda70d103a37d469ab4dd3061265a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cooldown: 2
+  Cooldown: 0.01
   thisCooldown: 0
   PickupPoint: {fileID: 1976666454}
   isEmpty: 0
@@ -2122,7 +2119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9664b4ab5601024b806f7e3e3a23a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cooldown: 2
+  Cooldown: 0.01
   thisCooldown: 0
   GivingPoint: {fileID: 1346936014}
   isEmpty: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class StorageObject : MonoBehaviour
 {
+    MasterManager masterManager;
     public ItemStack[] items;
     public ExitPoint exitPoint;
     public EntryPoint entryPoint;
@@ -10,6 +11,7 @@ public class StorageObject : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        masterManager = GameObject.FindGameObjectWithTag("MasterManager").GetComponent<MasterManager>();
         if (!manually)
         {
             items = new ItemStack[capacity];
@@ -24,7 +26,7 @@ public class StorageObject : MonoBehaviour
             int slot = getClosestAny();
             if (slot != -1)
             {
-                ItemInfo item = items[slot].itemInfo;
+                int item = items[slot].itemInfo;
                 if (exitPoint.AddToQueue(item))    //Если удалось, уменьшить стак или обнулить слот в хранилище
                 {
                     items[slot].amount--;
@@ -41,23 +43,23 @@ public class StorageObject : MonoBehaviour
         }
         if (entryPoint != null)    //Если есть точка входа, пытается принять предмет
         {
-            ItemInfo testItem = entryPoint.WhatItem();
-            if (testItem != null)
+            int testItem = entryPoint.WhatItem();
+            if (testItem != -1)
             {
-                Debug.Log("Test item: " + testItem.Name);
+                Debug.Log("Test item: " + masterManager.Items[testItem].Name);
                 if (searchForMatchingItem(testItem) != -1)    //Если есть такой предмет в хранилище, добавить к стаку
                 {
-                    ItemInfo item = entryPoint.GiveItem();
-                    Debug.Log("Item: " + item.Name);
-                    if (item != null)
+                    int item = entryPoint.GiveItem();
+                    if (item != -1)
                     {
+                        Debug.Log("Item: " + masterManager.Items[item].Name);
                         addItem(item);
                     }
                 }
                 else if (hasEmptySlot())    //Если нет, добавить новый стак
                 {
-                    ItemInfo item = entryPoint.GiveItem();
-                    if (item != null)
+                    int item = entryPoint.GiveItem();
+                    if (item != -1)
                     {
                         addItem(item);
                     }
@@ -76,7 +78,7 @@ public class StorageObject : MonoBehaviour
         }
         return -1;
     }
-    public bool addItem(ItemInfo itemInfo)//Добавить предмет в хранилище (BOOL)
+    public bool addItem(int itemInfo)//Добавить предмет в хранилище (BOOL)
     {
         int index = searchForMatchingItem(itemInfo);
         if (index != -1)
@@ -97,9 +99,9 @@ public class StorageObject : MonoBehaviour
         }
         return false;
     }
-    public int searchForMatchingItem(ItemInfo itemInfo)//Ищет предмет в хранилище для добавления его к существующему слоту
+    public int searchForMatchingItem(int itemInfo)//Ищет предмет в хранилище для добавления его к существующему слоту
     {
-        if (itemInfo == null)
+        if (itemInfo == -1)
         {
             return -1;
         }
@@ -107,7 +109,7 @@ public class StorageObject : MonoBehaviour
         {
             if (items[i] != null && items[i].itemInfo == itemInfo)
             {
-                if (items[i].amount < items[i].itemInfo.StackSize)
+                if (items[i].amount < masterManager.Items[itemInfo].StackSize)
                 {
                     return i;
                 }

@@ -5,17 +5,17 @@ public class EntryPoint : MonoBehaviour
     public float Cooldown;
     [SerializeField]float thisCooldown;
     [Header("DO NOT CHANGE MANUALLY")]
-    ItemInfo QueuedItem;
+    int QueuedItem = -1;
     public ExitPoint PickupPoint;
     [SerializeField] bool isEmpty;
     void Start()
     {
-        isEmpty = QueuedItem == null;
+        isEmpty = QueuedItem == -1;
         restartCooldown();
     }
     void Update()
     {
-        isEmpty = QueuedItem == null;
+        isEmpty = QueuedItem == -1;
         if (thisCooldown > 0) thisCooldown -= Time.deltaTime;
         //!ТУТ НИХУЯ НЕТ, ПОРТЫ НЕ ВЗАИМОДЕЙСТВУЮТ
     }
@@ -33,9 +33,9 @@ public class EntryPoint : MonoBehaviour
     }
     public bool notEmpty()
     {
-        return QueuedItem != null;
+        return QueuedItem != -1;
     }
-    public bool AddToQueue(ItemInfo item)
+    public bool AddToQueue(int item)
     {
         if (notEmpty())
         {
@@ -44,26 +44,27 @@ public class EntryPoint : MonoBehaviour
         QueuedItem = item;
         return true;
     }
-    public ItemInfo GiveItem()
+    public int GiveItem()
     {
         if (!readyToGive())
         {
-            return null;
+            return -1;
         }
-        ItemInfo item = this.QueuedItem;
-        QueuedItem = null;
+        int item = this.QueuedItem;
+        QueuedItem = -1;
+        restartCooldown();
         return item;
     }
-    public ItemInfo WhatItem()
+    public int WhatItem()
     {
         if (notEmpty())
         {
             return QueuedItem;
         }
-        return null;
+        return -1;
     }
     public void ClearQueue()
     {
-        QueuedItem = null;
+        QueuedItem = -1;
     }
 }

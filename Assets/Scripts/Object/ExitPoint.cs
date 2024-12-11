@@ -11,13 +11,13 @@ public class ExitPoint : MonoBehaviour
     [SerializeField] bool isEmpty;
     void Start()
     {
-        masterManager = GameObject.Find("MasterManager").GetComponent<MasterManager>();
-        isEmpty = QueuedItem == null;
+        masterManager = GameObject.FindGameObjectWithTag("MasterManager").GetComponent<MasterManager>();
+        isEmpty = QueuedItem == -1;
         restartCooldown();
     }
     void Update()
     {
-        isEmpty = QueuedItem == null;
+        isEmpty = QueuedItem == -1;
         if (thisCooldown > 0) thisCooldown -= Time.deltaTime;
         if (GivingPoint != null)
         {
@@ -25,7 +25,7 @@ public class ExitPoint : MonoBehaviour
             {
                 if (!GivingPoint.notEmpty())
                 {
-                    ItemInfo item = GiveItem();
+                    int item = GiveItem();
                     GivingPoint.AddToQueue(item);
                 }
             }
@@ -45,32 +45,32 @@ public class ExitPoint : MonoBehaviour
     }
     public bool notEmpty()
     {
-        return (QueuedItem != null);
+        return (QueuedItem != -1);
     }
-    public bool AddToQueue(ItemInfo item)
+    public bool AddToQueue(int itemID)
     {
         if (notEmpty())
         {
             Debug.Log("NOT EMPTY!!!");
             return false;
         }
-        QueuedItem = item;
+        QueuedItem = itemID;
         return true;
     }
-    public ItemInfo GiveItem()
+    public int GiveItem()
     {
         if (!readyToGive())
         {
-            return null;
+            return -1;
         }
-        ItemInfo item = this.QueuedItem;
-        Debug.Log("Giving item: " + item.Name);
-        QueuedItem = null;
+        int item = this.QueuedItem;
+        Debug.Log("Giving item: " + masterManager.Items[item].Name);
+        QueuedItem = -1;
         restartCooldown();
         return item;
     }
     public void ClearQueue()
     {
-        QueuedItem = null;
+        QueuedItem = -1;
     }
 }
