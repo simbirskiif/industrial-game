@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class ExitPoint : MonoBehaviour
 {
+    MasterManager masterManager;
     public float Cooldown;
     [SerializeField] float thisCooldown;
     [Header("DO NOT CHANGE MANUALLY")]
-    ItemInfo QueuedItem = null;
+    int QueuedItem = -1;
     public EntryPoint GivingPoint;
     [SerializeField] bool isEmpty;
     void Start()
     {
+        masterManager = GameObject.Find("MasterManager").GetComponent<MasterManager>();
         isEmpty = QueuedItem == null;
         restartCooldown();
     }
@@ -17,17 +19,16 @@ public class ExitPoint : MonoBehaviour
     {
         isEmpty = QueuedItem == null;
         if (thisCooldown > 0) thisCooldown -= Time.deltaTime;
-        if(GivingPoint != null)
+        if (GivingPoint != null)
         {
-           if(readyToGive())
-           {
-               if(!GivingPoint.notEmpty())
-               {
-                   restartCooldown();
-                   ItemInfo item = GiveItem();
-                   GivingPoint.AddToQueue(item);
-               }
-           }
+            if (readyToGive())
+            {
+                if (!GivingPoint.notEmpty())
+                {
+                    ItemInfo item = GiveItem();
+                    GivingPoint.AddToQueue(item);
+                }
+            }
         }
     }
     void restartCooldown()
@@ -63,8 +64,9 @@ public class ExitPoint : MonoBehaviour
             return null;
         }
         ItemInfo item = this.QueuedItem;
-        Debug.Log("Giving item: " + item.Name); 
+        Debug.Log("Giving item: " + item.Name);
         QueuedItem = null;
+        restartCooldown();
         return item;
     }
     public void ClearQueue()

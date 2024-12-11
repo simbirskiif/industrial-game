@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 9261216}
   m_Layer: 0
   m_Name: Manager
-  m_TagString: Untagged
+  m_TagString: MasterManager
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +178,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe3c83a8a1593804ebc431eceb0fbd15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Items: []
+  Items:
+  - Name: 
+    Prefab: {fileID: 0}
+    Size: 0
+    StackSize: 999
 --- !u!1 &46185503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,12 +1161,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cooldown: 0
   thisCooldown: 0
-  QueuedItem:
-    Name: 
-    Prefab: {fileID: 0}
-    Size: 0
-    StackSize: 0
   PickupPoint: {fileID: 0}
+  isEmpty: 0
 --- !u!65 &724113115
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1375,12 +1375,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cooldown: 0
   thisCooldown: 0
-  QueuedItem:
-    Name: 
-    Prefab: {fileID: 0}
-    Size: 0
-    StackSize: 0
   GivingPoint: {fileID: 0}
+  isEmpty: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,12 +1759,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cooldown: 2
   thisCooldown: 0
-  QueuedItem:
-    Name: 
-    Prefab: {fileID: 0}
-    Size: 0
-    StackSize: 0
   PickupPoint: {fileID: 1976666454}
+  isEmpty: 0
 --- !u!1 &1387271973
 GameObject:
   m_ObjectHideFlags: 0
@@ -2132,12 +2124,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cooldown: 2
   thisCooldown: 0
-  QueuedItem:
-    Name: 
-    Prefab: {fileID: 0}
-    Size: 0
-    StackSize: 0
   GivingPoint: {fileID: 1346936014}
+  isEmpty: 0
 --- !u!65 &1976666455
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2464,9 +2452,9 @@ SceneRoots:
   - {fileID: 1341440353}
   - {fileID: 583608420}
   - {fileID: 46185507}
-  - {fileID: 9261215}
   - {fileID: 488668550}
   - {fileID: 1616341124}
   - {fileID: 718756695}
   - {fileID: 1244710369}
   - {fileID: 681926173}
+  - {fileID: 9261215}

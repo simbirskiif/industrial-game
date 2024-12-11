@@ -7,4 +7,5 @@ public class ItemInfo
     public GameObject Prefab;
     public ItemSize Size;
     public int StackSize;
+    public string TAG;
 }
