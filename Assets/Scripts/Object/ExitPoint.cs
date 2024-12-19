@@ -19,16 +19,10 @@ public class ExitPoint : MonoBehaviour
     {
         isEmpty = QueuedItem == -1;
         if (thisCooldown > 0) thisCooldown -= Time.deltaTime;
-        if (GivingPoint != null)
+        if (GivingPoint != null && readyToGive() && !GivingPoint.notEmpty())
         {
-            if (readyToGive())
-            {
-                if (!GivingPoint.notEmpty())
-                {
-                    int item = GiveItem();
-                    GivingPoint.AddToQueue(item);
-                }
-            }
+            int item = GiveItem();
+            GivingPoint.AddToQueue(item);
         }
     }
     void restartCooldown()

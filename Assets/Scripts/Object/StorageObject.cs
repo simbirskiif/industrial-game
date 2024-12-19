@@ -15,48 +15,62 @@ public class StorageObject : MonoBehaviour
         if (!manually)
         {
             items = new ItemStack[capacity];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = ItemStack.nullItem;
+            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (exitPoint != null)    //Если есть точка выхода, пытается пропихнуть предмет в нее
+        ProcessExitPoint();
+        ProcessEntryPoint();
+    }
+
+    private void ProcessExitPoint()
+    {
+        if (exitPoint != null)
         {
             int slot = getClosestAny();
             if (slot != -1)
             {
                 int item = items[slot].itemInfo;
-                if (exitPoint.AddToQueue(item))    //Если удалось, уменьшить стак или обнулить слот в хранилище
+                if (exitPoint.AddToQueue(item))
                 {
                     items[slot].amount--;
-                    if (items[slot].amount == 0)
+                    if (items[slot].amount <= 0)
                     {
-                        items[slot] = null;
+                        items[slot] = ItemStack.nullItem;
                     }
                 }
                 else
                 {
-                    Debug.Log("Failed to add item to queue");
+                    //Debug.Log("Failed to add item to queue");
                 }
             }
         }
-        if (entryPoint != null)    //Если есть точка входа, пытается принять предмет
+    }
+
+    private void ProcessEntryPoint()
+    {
+        if (entryPoint != null)
         {
             int testItem = entryPoint.WhatItem();
             if (testItem != -1)
             {
-                Debug.Log("Test item: " + masterManager.Items[testItem].Name);
-                if (searchForMatchingItem(testItem) != -1)    //Если есть такой предмет в хранилище, добавить к стаку
+                //Debug.Log("Test item: " + masterManager.Items[testItem].Name);
+                if (searchForMatchingItem(testItem) != -1)
                 {
                     int item = entryPoint.GiveItem();
                     if (item != -1)
                     {
-                        Debug.Log("Item: " + masterManager.Items[item].Name);
+                        //Debug.Log("Item: " + masterManager.Items[item].Name);
                         addItem(item);
                     }
                 }
-                else if (hasEmptySlot())    //Если нет, добавить новый стак
+                else if (hasEmptySlot())
                 {
                     int item = entryPoint.GiveItem();
                     if (item != -1)
@@ -71,7 +85,7 @@ public class StorageObject : MonoBehaviour
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i] != null)
+            if (items[i] != ItemStack.nullItem)
             {
                 return i;
             }
@@ -91,9 +105,7 @@ public class StorageObject : MonoBehaviour
             index = searchEmptySlot();
             if (index != -1)
             {
-                items[index] = new ItemStack();
-                items[index].itemInfo = itemInfo;
-                items[index].amount = 1;
+                items[index] = new ItemStack(itemInfo, 1);
                 return true;
             }
         }
@@ -107,13 +119,12 @@ public class StorageObject : MonoBehaviour
         }
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i] != null && items[i].itemInfo == itemInfo)
+            if (items[i] != ItemStack.nullItem && items[i].itemInfo == itemInfo)
             {
                 if (items[i].amount < masterManager.Items[itemInfo].StackSize)
                 {
                     return i;
                 }
-                return -1;
             }
         }
         return -1;
@@ -122,7 +133,7 @@ public class StorageObject : MonoBehaviour
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i] == null)
+            if (items[i] == ItemStack.nullItem)
             {
                 return i;
             }
@@ -133,7 +144,7 @@ public class StorageObject : MonoBehaviour
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i] == null)
+            if (items[i] == ItemStack.nullItem)
             {
                 return true;
             }
