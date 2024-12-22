@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public class SystemManager : MonoBehaviour, IOnChangePositionInSelector
+public class SystemManager : MonoBehaviour, IOnChangePositionInSelector, IOnChangeCheckbox
 {
     private float deltaTime = 0.0f;
     public int targetFrameRate = 60;
     PanelController debugPanel;
     bool allowDebug = false;
+    bool visibleFps = false;
     [SerializeField] Selector targetFpsSelector;
+    [SerializeField] Checkbox fpsCheckbox;
     void Start()
     {
         Application.targetFrameRate = targetFrameRate;
@@ -28,6 +30,11 @@ public class SystemManager : MonoBehaviour, IOnChangePositionInSelector
             options[2] = new SelectorOptions("120", 120);
             targetFpsSelector.SetData("Target FPS", options);
         }
+        if (fpsCheckbox != null)
+        {
+            fpsCheckbox.setListener(this);
+            fpsCheckbox.setData("Visible Fps", visibleFps);
+        }
     }
 
     void Update()
@@ -47,7 +54,10 @@ public class SystemManager : MonoBehaviour, IOnChangePositionInSelector
             style.fontSize = 24;
             style.normal.textColor = Color.green;
             float fps = 1.0f / deltaTime;
-            GUI.Label(new Rect(10, 20, 100, 20), $"FPS: {fps}", style);
+            if (visibleFps)
+            {
+                GUI.Label(new Rect(10, 10, 200, 50), "FPS: " + Mathf.Ceil(fps).ToString(), style);
+            }
             if (GUI.Button(new Rect(10, 135, 200, 50), "Open Debug Panel"))
             {
                 debugPanel.OpenPanel();
@@ -71,5 +81,10 @@ public class SystemManager : MonoBehaviour, IOnChangePositionInSelector
                 Application.targetFrameRate = 120;
                 break;
         }
+    }
+    void IOnChangeCheckbox.OnChangeCheckbox(bool isChecked)
+    {
+        visibleFps = isChecked;
+        Debug.Log(isChecked);
     }
 }

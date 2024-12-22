@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class TouchTracker : MonoBehaviour
     private float targetPosition;
     private float targetRotation;
     private float targetScale;
+    ButtonPressHandler buttonPressHandler;
     void OnGUI()
     {
         GUIStyle style = new GUIStyle();
@@ -26,11 +28,29 @@ public class TouchTracker : MonoBehaviour
         GUI.Label(new Rect(10, 85, 100, 20), $"targetScale: {targetScale}", style);
         GUI.Label(new Rect(10, 110, 100, 20), $"targetPosition: {targetPosition}", style);
     }
+    void Start()
+    {
+        buttonPressHandler = FindFirstObjectByType<ButtonPressHandler>();
+    }
 
     void Update()
     {
+        float thisScale = -cameraTargetScale.transform.localPosition.z;
+        if (thisScale < minScale - 5)
+        {
+            cameraTargetScale.transform.localPosition = new Vector3(0, 0, -Mathf.Lerp(thisScale, minScale, 0.5f));
+        }
+        else if (thisScale < minScale)
+        {
+            cameraTargetScale.transform.localPosition = new Vector3(0, 0, -Mathf.Lerp(thisScale, minScale, 0.1f));
+        }
+        if (thisScale > maxScale)
+        {
+            cameraTargetScale.transform.localPosition = new Vector3(0, 0, -Mathf.Lerp(thisScale, maxScale, 0.1f));
+        }
         // Пример использования функций
         Vector2 singleFingerDelta = GetSingleFingerDelta();
+        if (!buttonPressHandler.isPressed) { return; }
         if (singleFingerDelta != Vector2.zero)
         {
             targetPosition = singleFingerDelta.magnitude;
@@ -42,7 +62,7 @@ public class TouchTracker : MonoBehaviour
             deltaMovement = rotation * deltaMovement; // Поворачиваем вектор
 
             // Применяем перемещение
-            cameraTargetPosition.transform.position += deltaMovement * sensitivity * Time.deltaTime;
+            cameraTargetPosition.transform.position += deltaMovement * sensitivity;
             //Debug.Log($"Перемещение одного пальца: {singleFingerDelta}");
         }
 
@@ -50,29 +70,13 @@ public class TouchTracker : MonoBehaviour
         float twoFingerDistanceDelta = GetTwoFingerDistanceDelta();
         if (Mathf.Abs(twoFingerDistanceDelta) > 0.01f) // Игнорируем слишком маленькие изменения
         {
-            cameraTargetScale.transform.localPosition += new Vector3(0, 0, twoFingerDistanceDelta) * scaleSensitivity * Time.deltaTime;
-            targetScale = twoFingerDistanceDelta;
+            cameraTargetScale.transform.localPosition += new Vector3(0, 0, twoFingerDistanceDelta) * scaleSensitivity;
+            if (-cameraTargetScale.transform.localPosition.z < minScale - 5)
+            {
+                cameraTargetScale.transform.localPosition = new Vector3(0, 0, -(minScale - 5));
+            }
+            //targetScale = twoFingerDistanceDelta;
         }
-        float thisScale = cameraTargetScale.transform.localPosition.z;
-        if (thisScale > -minScale)
-        {
-            cameraTargetScale.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(thisScale, -minScale, 0.1f));
-        }
-        else if (thisScale > -(minScale - 2))
-        {
-            cameraTargetScale.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(thisScale, -10, 10f));
-        }
-        else if (thisScale > -1)
-        {
-            cameraTargetScale.transform.localPosition = new Vector3(0, 0, -1);
-        }
-        if (thisScale < -maxScale)
-        {
-            cameraTargetScale.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(thisScale, -maxScale, 0.1f));
-        }
-
-
-
         float rotationDelta = GetTwoFingerRotationDelta();
 
         if (Mathf.Abs(rotationDelta) > 0.01f) // Игнорируем слишком маленькие изменения

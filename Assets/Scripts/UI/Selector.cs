@@ -23,7 +23,7 @@ public class Selector : MonoBehaviour
         data.text = options[position].data;
         for (int i = 0; i < options.Length; i++)
         {
-            GameObject dot = Instantiate(dotPrefab, dots.transform);
+            Instantiate(dotPrefab, dots.transform);
         }
         setDot(position);
     }

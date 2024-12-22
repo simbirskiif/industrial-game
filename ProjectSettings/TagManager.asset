@@ -5,7 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - MasterManager
+  - Pointer
   - DebugPanel
+  - SettingsPanel
+  - Pause Panel
+  - Touch Handler
   layers:
   - Default
   - TransparentFX
