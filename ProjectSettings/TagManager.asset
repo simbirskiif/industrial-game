@@ -10,6 +10,7 @@ TagManager:
   - SettingsPanel
   - Pause Panel
   - Touch Handler
+  - Object Info Panel
   layers:
   - Default
   - TransparentFX

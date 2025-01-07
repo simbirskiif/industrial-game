@@ -6,6 +6,7 @@ public class ButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
     public bool isPressed = false;
     float deltaTime = 0.0f;
     public float holdThreshold = 0.7f;
+    public IOnButtonReleasedHandler listener;
     public void OnPointerDown(PointerEventData eventData)
     {
         isPressed = true;
@@ -16,6 +17,20 @@ public class ButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         isPressed = false;
         Debug.Log("Button Released");
+        if (deltaTime > holdThreshold)
+        {
+            if (listener != null)
+            {
+                listener.OnButtonHeld();
+            }
+        }
+        else
+        {
+            if (listener != null)
+            {
+                listener.OnButtonClicked();
+            }
+        }
         deltaTime = 0.0f;
     }
     void Update()
@@ -24,6 +39,10 @@ public class ButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
         {
             deltaTime += Time.deltaTime;
         }
+    }
+    public void setListener(IOnButtonReleasedHandler listener)
+    {
+        this.listener = listener;
     }
 }
 

@@ -5,13 +5,16 @@ using UnityEngine.UI;
 
 public class PointerChecker : MonoBehaviour
 {
+    IPointerChecker pointerCheckerListener;
     public int ObjectLayerMask = 31;
-    [Header("UI Elements")]
-    public Text ObjectName;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
+    }
+    public void setListener(IPointerChecker pointerChecker)
+    {
+        pointerCheckerListener = pointerChecker;
     }
 
     // Update is called once per frame
@@ -26,8 +29,7 @@ public class PointerChecker : MonoBehaviour
         {
             if (other.gameObject.layer == ObjectLayerMask)
             {
-                ObjectName.text = other.gameObject.GetComponent<ObjectInfo>().itemName;
-                other.gameObject.GetComponent<Outline>().enabled = true;
+                pointerCheckerListener.onEnterZone(other.gameObject.GetComponent<ObjectInfo>());
             }
         }
     }
@@ -38,9 +40,8 @@ public class PointerChecker : MonoBehaviour
         {
             if (other.gameObject.layer == ObjectLayerMask)
             {
-                other.gameObject.GetComponent<Outline>().enabled = false;
+                pointerCheckerListener.onExitZone();
             }
         }
-        ObjectName.text = "";
     }
 }
